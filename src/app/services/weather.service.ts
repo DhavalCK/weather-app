@@ -10,15 +10,15 @@ export class WeatherService {
 
   constructor(private http: HttpClient) {}
 
-  getWeatherByCity(city: string) {
+  getWeatherByCity(city: string, unit: string = 'metric') {
     return this.http.get(
-      `${this.baseUrl}?q=${city}&appid=${environment.weatherApiKey}&units=metric`
+      `${this.baseUrl}?q=${city}&appid=${environment.weatherApiKey}&units=${unit}`
     );
   }
 
-  getWeatherByCoords(lat: number, lon: number) {
+  getWeatherByCoords(lat: number, lon: number, unit: string = 'metric') {
     return this.http.get(
-      `${this.baseUrl}?lat=${lat}&lon=${lon}&appid=${environment.weatherApiKey}`
+      `${this.baseUrl}?lat=${lat}&lon=${lon}&appid=${environment.weatherApiKey}&units=${unit}`
     );
   }
 }

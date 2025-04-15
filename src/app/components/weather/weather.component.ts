@@ -12,6 +12,7 @@ export class WeatherComponent {
   error: string | null = null;
   currentDate = new Date();
   loading = false;
+  unit: 'metric' | 'imperial' = 'metric'; // default is Celsius
 
   constructor(private weatherService: WeatherService) {}
 
@@ -30,20 +31,22 @@ export class WeatherComponent {
         const { latitude, longitude } = position.coords;
 
         this.loading = true;
-        this.weatherService.getWeatherByCoords(latitude, longitude).subscribe({
-          next: (data) => {
-            console.log('getWeatherByLocation =', data);
+        this.weatherService
+          .getWeatherByCoords(latitude, longitude, this.unit)
+          .subscribe({
+            next: (data) => {
+              console.log('getWeatherByLocation =', data);
 
-            this.weatherData = data;
-            this.loading = false;
-            this.error = null;
-          },
-          error: (err) => {
-            this.weatherData = null;
-            this.loading = false;
-            this.error = 'Unable to fetch weather for your location.';
-          },
-        });
+              this.weatherData = data;
+              this.loading = false;
+              this.error = null;
+            },
+            error: (err) => {
+              this.weatherData = null;
+              this.loading = false;
+              this.error = 'Unable to fetch weather for your location.';
+            },
+          });
       },
       () => {
         this.error = 'Permission denied or unable to access location.';
@@ -56,7 +59,7 @@ export class WeatherComponent {
     this.loading = true;
     this.error = null;
 
-    this.weatherService.getWeatherByCity(this.city).subscribe({
+    this.weatherService.getWeatherByCity(this.city, this.unit).subscribe({
       next: (data) => {
         console.log('getWeatherByCity =', data);
 
@@ -69,5 +72,15 @@ export class WeatherComponent {
         this.loading = false;
       },
     });
+  }
+
+  get unitSymbol() {
+    return this.unit === 'metric' ? '°C' : '°F';
+  }
+
+  toggleUnit() {
+    this.unit = this.unit === 'metric' ? 'imperial' : 'metric';
+    if (this.city) this.getWeatherByCity();
+    else if (this.weatherData?.coord) this.getWeatherByLocation(); // triggers re-fetch with new unit
   }
 }

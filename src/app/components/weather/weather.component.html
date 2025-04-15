@@ -20,13 +20,21 @@
 >
   Use My Location
 </button>
+<button
+  (click)="toggleUnit()"
+  class="ml-4 bg-gray-700 text-white px-3 py-1 rounded text-sm"
+>
+  Switch to {{ unit === "metric" ? "°F" : "°C" }}
+</button>
 
 <div *ngIf="weatherData" class="mt-6 text-center space-y-4">
   <h2 class="text-2xl font-bold">
     {{ weatherData.name }}, {{ weatherData.sys.country }}
   </h2>
 
-  <div class="text-5xl font-semibold">{{ weatherData.main.temp }}°C</div>
+  <div class="text-5xl font-semibold">
+    {{ weatherData.main.temp }}{{ unitSymbol }}
+  </div>
 
   <div class="flex justify-center items-center gap-2 text-lg">
     <img
