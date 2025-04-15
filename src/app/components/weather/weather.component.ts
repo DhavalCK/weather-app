@@ -13,21 +13,34 @@ export class WeatherComponent {
 
   constructor(private weatherService: WeatherService) {}
 
-  ngOnInit() {
-    console.log('navigator - ', navigator);
-    this.getWeatherByCoordinates();
-  }
+  ngOnInit() {}
 
-  getWeatherByCoordinates() {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const { latitude, longitude } = position.coords;
-      this.weatherService.getWeatherByCoords(latitude, longitude).subscribe({
-        next: (result) => {
-          console.log('result =', result);
-        },
-        error: (err) => {},
-      });
-    });
+  getWeatherByLocation() {
+    if (!navigator.geolocation) {
+      this.error = 'Geolocation is not supported by your browser.';
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        this.weatherService.getWeatherByCoords(latitude, longitude).subscribe({
+          next: (data) => {
+            console.log('getWeatherByLocation =', data);
+
+            this.weatherData = data;
+            this.error = null;
+          },
+          error: (err) => {
+            this.weatherData = null;
+            this.error = 'Unable to fetch weather for your location.';
+          },
+        });
+      },
+      () => {
+        this.error = 'Permission denied or unable to access location.';
+      }
+    );
   }
 
   getWeatherByCity() {
@@ -35,6 +48,8 @@ export class WeatherComponent {
 
     this.weatherService.getWeatherByCity(this.city).subscribe({
       next: (data) => {
+        console.log('getWeatherByCity =', data);
+
         this.weatherData = data;
         this.error = null;
       },
