@@ -20,3 +20,43 @@
 >
   Use My Location
 </button>
+
+<div *ngIf="weatherData" class="mt-6 text-center space-y-4">
+  <h2 class="text-2xl font-bold">
+    {{ weatherData.name }}, {{ weatherData.sys.country }}
+  </h2>
+
+  <div class="text-5xl font-semibold">{{ weatherData.main.temp }}°C</div>
+
+  <div class="flex justify-center items-center gap-2 text-lg">
+    <img
+      [src]="
+        'https://openweathermap.org/img/wn/' +
+        weatherData.weather[0].icon +
+        '@2x.png'
+      "
+      alt="weather icon"
+    />
+    <span class="capitalize">{{ weatherData.weather[0].description }}</span>
+  </div>
+
+  <div class="flex justify-center gap-6 mt-2 text-sm text-gray-700">
+    <div>💧 Humidity: {{ weatherData.main.humidity }}%</div>
+    <div>🌬️ Wind: {{ weatherData.wind.speed }} m/s</div>
+  </div>
+
+  <div class="text-xs mt-2 text-gray-500">
+    📅 {{ currentDate | date : "fullDate" }} – 🕒
+    {{ currentDate | date : "shortTime" }}
+  </div>
+</div>
+
+<div *ngIf="error" class="mt-4 text-red-600 font-medium text-center">
+  ⚠️ {{ error }}
+</div>
+
+<div *ngIf="loading" class="mt-6 flex justify-center">
+  <div
+    class="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"
+  ></div>
+</div>

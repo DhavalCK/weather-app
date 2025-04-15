@@ -10,10 +10,14 @@ export class WeatherComponent {
   city: string = '';
   weatherData: any;
   error: string | null = null;
+  currentDate = new Date();
+  loading = false;
 
   constructor(private weatherService: WeatherService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getWeatherByLocation();
+  }
 
   getWeatherByLocation() {
     if (!navigator.geolocation) {
@@ -24,15 +28,19 @@ export class WeatherComponent {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
+
+        this.loading = true;
         this.weatherService.getWeatherByCoords(latitude, longitude).subscribe({
           next: (data) => {
             console.log('getWeatherByLocation =', data);
 
             this.weatherData = data;
+            this.loading = false;
             this.error = null;
           },
           error: (err) => {
             this.weatherData = null;
+            this.loading = false;
             this.error = 'Unable to fetch weather for your location.';
           },
         });
@@ -45,17 +53,20 @@ export class WeatherComponent {
 
   getWeatherByCity() {
     if (!this.city) return;
+    this.loading = true;
+    this.error = null;
 
     this.weatherService.getWeatherByCity(this.city).subscribe({
       next: (data) => {
         console.log('getWeatherByCity =', data);
 
         this.weatherData = data;
-        this.error = null;
+        this.loading = false;
       },
-      error: (err) => {
-        this.weatherData = null;
+      error: () => {
         this.error = 'City not found or API error.';
+        this.weatherData = null;
+        this.loading = false;
       },
     });
   }
