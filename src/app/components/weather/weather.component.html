@@ -1,70 +1,78 @@
-<div class="flex items-center justify-center p-4">
-  <input
-    [(ngModel)]="city"
-    (keyup.enter)="getWeatherByCity()"
-    type="text"
-    placeholder="Enter city name"
-    class="border rounded px-4 py-2 w-full max-w-md"
-  />
-  <button
-    (click)="getWeatherByCity()"
-    class="ml-2 bg-blue-500 text-white px-4 py-2 rounded"
-  >
-    Search
-  </button>
-</div>
-
-<button
-  (click)="getWeatherByLocation()"
-  class="mt-2 bg-green-500 text-white px-4 py-2 rounded"
+<div
+  [ngClass]="backgroundClass"
+  class="min-h-screen flex flex-col items-center justify-center p-4 transition-all duration-500 ease-in-out"
 >
-  Use My Location
-</button>
-<button
-  (click)="toggleUnit()"
-  class="ml-4 bg-gray-700 text-white px-3 py-1 rounded text-sm"
->
-  Switch to {{ unit === "metric" ? "°F" : "°C" }}
-</button>
-
-<div *ngIf="weatherData" class="mt-6 text-center space-y-4">
-  <h2 class="text-2xl font-bold">
-    {{ weatherData.name }}, {{ weatherData.sys.country }}
-  </h2>
-
-  <div class="text-5xl font-semibold">
-    {{ weatherData.main.temp }}{{ unitSymbol }}
-  </div>
-
-  <div class="flex justify-center items-center gap-2 text-lg">
-    <img
-      [src]="
-        'https://openweathermap.org/img/wn/' +
-        weatherData.weather[0].icon +
-        '@2x.png'
-      "
-      alt="weather icon"
-    />
-    <span class="capitalize">{{ weatherData.weather[0].description }}</span>
-  </div>
-
-  <div class="flex justify-center gap-6 mt-2 text-sm text-gray-700">
-    <div>💧 Humidity: {{ weatherData.main.humidity }}%</div>
-    <div>🌬️ Wind: {{ weatherData.wind.speed }} m/s</div>
-  </div>
-
-  <div class="text-xs mt-2 text-gray-500">
-    📅 {{ currentDate | date : "fullDate" }} – 🕒
-    {{ currentDate | date : "shortTime" }}
-  </div>
-</div>
-
-<div *ngIf="error" class="mt-4 text-red-600 font-medium text-center">
-  ⚠️ {{ error }}
-</div>
-
-<div *ngIf="loading" class="mt-6 flex justify-center">
+  <!-- Main Weather Information -->
   <div
-    class="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"
-  ></div>
+    class="flex flex-col items-center justify-center p-4 space-y-4 md:flex-row md:space-y-0 md:space-x-4"
+  >
+    <input
+      [(ngModel)]="city"
+      (keyup.enter)="getWeatherByCity()"
+      type="text"
+      placeholder="Enter city name"
+      class="border rounded px-4 py-2 w-full max-w-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-800"
+    />
+    <button
+      (click)="getWeatherByCity()"
+      class="mt-2 md:mt-0 bg-blue-500 text-white px-6 py-2 rounded-lg shadow-md transition-all duration-300 hover:bg-blue-600 focus:outline-none"
+    >
+      Search
+    </button>
+
+    <!-- Location Icon Button -->
+    <button
+      (click)="getWeatherByLocation()"
+      class="mt-2 md:mt-0 bg-green-500 text-white px-6 py-2 rounded-lg shadow-md transition-all duration-300 hover:bg-green-600 flex items-center space-x-2 focus:outline-none"
+    >
+      <i class="fa fa-location-arrow"></i>
+      <!-- Location Icon -->
+      <span>Use My Location</span>
+    </button>
+  </div>
+
+  <!-- Show Weather Info -->
+  <div *ngIf="weatherData" class="mt-8 text-center space-y-6 md:space-y-8">
+    <h2 class="text-3xl font-semibold text-gray-800">
+      {{ weatherData.name }}, {{ weatherData.sys.country }}
+    </h2>
+
+    <div class="text-6xl font-bold text-blue-800">
+      {{ weatherData.main.temp }}{{ unitSymbol }}
+    </div>
+
+    <div class="flex justify-center items-center gap-4 text-xl text-gray-600">
+      <img
+        [src]="
+          'https://openweathermap.org/img/wn/' +
+          weatherData.weather[0].icon +
+          '@2x.png'
+        "
+        alt="weather icon"
+        class="w-16 h-16"
+      />
+      <span class="capitalize">{{ weatherData.weather[0].description }}</span>
+    </div>
+
+    <div class="flex justify-center gap-8 mt-4 text-lg text-gray-700">
+      <div>💧 Humidity: {{ weatherData.main.humidity }}%</div>
+      <div>🌬️ Wind: {{ weatherData.wind.speed }} m/s</div>
+    </div>
+
+    <div class="text-sm mt-4 text-emerald-900">
+      📅 {{ currentDate | date : "fullDate" }} – 🕒
+      {{ currentDate | date : "shortTime" }}
+    </div>
+  </div>
+
+  <!-- Error and Loading -->
+  <div *ngIf="error" class="mt-6 text-red-600 font-medium text-center">
+    ⚠️ {{ error }}
+  </div>
+
+  <div *ngIf="loading" class="mt-8 flex justify-center">
+    <div
+      class="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"
+    ></div>
+  </div>
 </div>

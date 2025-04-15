@@ -13,6 +13,7 @@ export class WeatherComponent {
   currentDate = new Date();
   loading = false;
   unit: 'metric' | 'imperial' = 'metric'; // default is Celsius
+  backgroundClass: string = 'bg-blue-100'; // Default background (Clear Sky)
 
   constructor(private weatherService: WeatherService) {}
 
@@ -38,6 +39,9 @@ export class WeatherComponent {
               console.log('getWeatherByLocation =', data);
 
               this.weatherData = data;
+              this.city = this.weatherData.name;
+              this.updateBackground(this.weatherData.weather[0].description);
+
               this.loading = false;
               this.error = null;
             },
@@ -64,6 +68,8 @@ export class WeatherComponent {
         console.log('getWeatherByCity =', data);
 
         this.weatherData = data;
+        this.updateBackground(this.weatherData.weather[0].description);
+
         this.loading = false;
       },
       error: () => {
@@ -82,5 +88,19 @@ export class WeatherComponent {
     this.unit = this.unit === 'metric' ? 'imperial' : 'metric';
     if (this.city) this.getWeatherByCity();
     else if (this.weatherData?.coord) this.getWeatherByLocation(); // triggers re-fetch with new unit
+  }
+
+  updateBackground(weatherDescription: string) {
+    if (weatherDescription.includes('clear')) {
+      this.backgroundClass = 'bg-blue-200'; // Clear sky
+    } else if (weatherDescription.includes('cloud')) {
+      this.backgroundClass = 'bg-gray-300'; // Cloudy
+    } else if (weatherDescription.includes('rain')) {
+      this.backgroundClass = 'bg-blue-500'; // Rainy weather
+    } else if (weatherDescription.includes('snow')) {
+      this.backgroundClass = 'bg-white'; // Snowy weather
+    } else {
+      this.backgroundClass = 'bg-gray-100'; // Default background
+    }
   }
 }
