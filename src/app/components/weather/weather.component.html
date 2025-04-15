@@ -1,1 +1,15 @@
-<p>weather works!</p>
+<div class="flex items-center justify-center p-4">
+  <input
+    [(ngModel)]="city"
+    (keyup.enter)="getWeatherByCity()"
+    type="text"
+    placeholder="Enter city name"
+    class="border rounded px-4 py-2 w-full max-w-md"
+  />
+  <button
+    (click)="getWeatherByCity()"
+    class="ml-2 bg-blue-500 text-white px-4 py-2 rounded"
+  >
+    Search
+  </button>
+</div>

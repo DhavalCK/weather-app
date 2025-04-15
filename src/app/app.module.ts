@@ -8,6 +8,7 @@ import { WeatherComponent } from './components/weather/weather.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent, WeatherComponent, LoaderComponent],
@@ -21,6 +22,7 @@ import { HttpClientModule } from '@angular/common/http';
       registrationStrategy: 'registerWhenStable:30000',
     }),
     HttpClientModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

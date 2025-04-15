@@ -7,6 +7,10 @@ import { WeatherService } from 'src/app/services/weather.service';
   styleUrls: ['./weather.component.scss'],
 })
 export class WeatherComponent {
+  city: string = '';
+  weatherData: any;
+  error: string | null = null;
+
   constructor(private weatherService: WeatherService) {}
 
   ngOnInit() {
@@ -23,6 +27,21 @@ export class WeatherComponent {
         },
         error: (err) => {},
       });
+    });
+  }
+
+  getWeatherByCity() {
+    if (!this.city) return;
+
+    this.weatherService.getWeatherByCity(this.city).subscribe({
+      next: (data) => {
+        this.weatherData = data;
+        this.error = null;
+      },
+      error: (err) => {
+        this.weatherData = null;
+        this.error = 'City not found or API error.';
+      },
     });
   }
 }
