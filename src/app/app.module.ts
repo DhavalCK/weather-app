@@ -6,13 +6,11 @@ import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { WeatherComponent } from './components/weather/weather.component';
 import { LoaderComponent } from './components/loader/loader.component';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    WeatherComponent,
-    LoaderComponent
-  ],
+  declarations: [AppComponent, WeatherComponent, LoaderComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -20,10 +18,11 @@ import { LoaderComponent } from './components/loader/loader.component';
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
-    })
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
+    HttpClientModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
